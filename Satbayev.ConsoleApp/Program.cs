@@ -15,19 +15,52 @@ namespace Satbayev.ConsoleApp
         {
             Console.Write("Введите путь к базе данных: ");
             Path = Console.ReadLine();
-            
-            ServiceClient service = new ServiceClient(Path);
-            Client client = new Client();
-            client.IIn = "060504186488";
-            client.Email = "satbayev@gmail.com";
-            client.FirstName = "Bekbulat";
-            client.MiddleName = "Asanali";
-            client.LastName = "Satbayev";
-            client.BirtDay = new DateTime(2002,06,27);
-            client.CreatDate = DateTime.Now;
-            client.Adress = new Adress() { Country = "Kazakstan", City = "Shymkent", House = "BigHouse", Region="Abai", Street="M.Auezov"};
 
-            service.Registration(client);
+            Console.WriteLine("1) - Авторизация");
+            Console.WriteLine("2) - Регистрация");
+            ServiceClient service = new ServiceClient(Path);
+            string Question = Console.ReadLine();
+            if (Question == "1")
+            {
+                Console.Write("ВВедите ваш логин: ");
+                string login = Console.ReadLine();
+                Console.Write("Введите пароль: ");
+                string password = Console.ReadLine();
+                Client client = service.Auth(login, password);
+                if(client == null)
+                {
+                    Console.WriteLine("Ваш пароль или логин не правильный!!!");
+                }else
+                {
+                    Console.WriteLine("Привет " + client.FirstName);
+                }
+
+            } else if(Question == "2")
+            {
+                Client client = new Client();
+                Console.Write("Введите ИИН: ");
+                client.IIn = Console.ReadLine();
+
+                Console.Write("Введите Email: ");
+                client.Email = Console.ReadLine();
+
+                Console.Write("Введите Фамилию: ");
+                client.FirstName = Console.ReadLine();
+
+                Console.Write("Введите Имя: ");
+                client.MiddleName = Console.ReadLine();
+
+                Console.Write("Введите Отечство: ");
+                client.LastName = Console.ReadLine();
+
+                Console.Write("Введите Дату рождения: ");
+                client.BirtDay = DateTime.Parse(Console.ReadLine());
+                client.CreatDate = DateTime.Now;
+                client.Adress = new Adress() { Country = "Kazakstan", City = "Shymkent", House = "BigHouse", Region = "Abai", Street = "M.Auezov" };
+
+                service.Registration(client);
+            }
+           
         }
     }
 }
