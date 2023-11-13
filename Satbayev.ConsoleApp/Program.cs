@@ -13,12 +13,18 @@ namespace Satbayev.ConsoleApp
         public static string Path = "";
         static void Main(string[] args)
         {
-            Console.Write("Введите путь к базе данных: ");
-            Path = Console.ReadLine();
+            Errordelegate del=null;
+            del += ShowErrorMesage;
+            del += SantEmail;
+
+            Path = @"C:\Temp1\test.db";
 
             Console.WriteLine("1) - Авторизация");
             Console.WriteLine("2) - Регистрация");
-            ServiceClient service = new ServiceClient(Path);
+            ServiceClient service = 
+                new ServiceClient(Path, del);
+
+
             string Question = Console.ReadLine();
             if (Question == "1")
             {
@@ -62,5 +68,16 @@ namespace Satbayev.ConsoleApp
             }
            
         }
+        public static void ShowErrorMesage (Exception exception)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(exception.Message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        public static void SantEmail (Exception exception)
+        {
+            Console.WriteLine("Email sant");
+        }
     }
+    
 }

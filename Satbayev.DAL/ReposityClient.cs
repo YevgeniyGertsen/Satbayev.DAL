@@ -7,8 +7,17 @@ using System.Threading.Tasks;
 
 namespace Satbayev.DAL
 {
+    public delegate void Errordelegate(Exception exception);
+
     public class ReposityClient
     {
+        private Errordelegate errordelegate;
+
+        public void RegisterDelegite (Errordelegate errordelegate)
+        {
+            this.errordelegate += errordelegate;
+        }
+
         private string Path;
         public ReposityClient(string Path)
         {
@@ -24,9 +33,13 @@ namespace Satbayev.DAL
                     clients.Insert(client);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                if(errordelegate != null)
+                {
+                    errordelegate(ex);
+                }
+ 
             }
 
             return true;
@@ -42,9 +55,12 @@ namespace Satbayev.DAL
                          .First(f => f.Email == email & f.Password == password);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                if(errordelegate != null)
+                {
+                    errordelegate(ex);
+                }
             }
             return null;
         }
@@ -59,9 +75,9 @@ namespace Satbayev.DAL
                         .First(f => f.Id == Id);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                errordelegate(ex);
                
             }
             return null;
