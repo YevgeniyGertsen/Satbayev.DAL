@@ -9,17 +9,11 @@ namespace Satbayev.BLL
 
 {
 
-    public class ServiceClient
+    public class ServiceClient :Service<Client>
     {
-      
-        public string Path { get; set; } //Свойства
-        ReposityClient reposity = null;
-        public ServiceClient(string Path, Errordelegate errordelegate) {
-            this.Path = Path;
+        public ServiceClient(string Path): base(Path)
+        {}
 
-            reposity = new ReposityClient(Path);
-            reposity.RegisterDelegite(errordelegate);
-        }
         public void Registration(Client client)
         {     
             bool resault = reposity.CreateClient(client);

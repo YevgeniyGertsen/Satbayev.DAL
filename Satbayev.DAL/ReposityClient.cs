@@ -23,6 +23,7 @@ namespace Satbayev.DAL
         {
             this.Path = Path;
         }
+
         public bool CreateClient(Client client)
         {
             try
@@ -51,8 +52,10 @@ namespace Satbayev.DAL
             {
                 using (var db = new LiteDatabase(Path))
                 {
-                    return db.GetCollection<Client>("Client").FindAll()
-                         .First(f => f.Email == email & f.Password == password);
+                    return db.GetCollection<Client>("Client")
+                        .FindAll()
+                         .First(f => f.Email == email && 
+                         f.Password == password);
                 }
             }
             catch (Exception ex)
@@ -64,6 +67,7 @@ namespace Satbayev.DAL
             }
             return null;
         }
+
         public Client GetClient(int Id)
         {
             try
@@ -71,14 +75,14 @@ namespace Satbayev.DAL
                 using (var db = new LiteDatabase(Path))
                 {
                     return db.GetCollection<Client>
-                    ("Client").FindAll()
-                        .First(f => f.Id == Id);
+                    ("Client")
+                    .FindAll()
+                    .First(f => f.Id == Id);
                 }
             }
             catch (Exception ex)
             {
-                errordelegate(ex);
-               
+                errordelegate(ex);               
             }
             return null;
             
