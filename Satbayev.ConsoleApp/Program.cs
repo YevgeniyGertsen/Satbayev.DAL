@@ -2,6 +2,7 @@
 using Satbayev.DAL;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,20 +11,16 @@ namespace Satbayev.ConsoleApp
 {
     internal class Program
     {
-        public static string Path = "";
+        public static string Path = ConfigurationManager
+            .ConnectionStrings["defaultConnection"]
+            .ConnectionString;
         static void Main(string[] args)
         {
-            Errordelegate del=null;
-            del += ShowErrorMesage;
-            del += SantEmail;
-
-            Path = @"C:\Temp1\test.db";
-
             Console.WriteLine("1) - Авторизация");
             Console.WriteLine("2) - Регистрация");
-            ServiceClient service = 
-                new ServiceClient(Path, del);
 
+            ServiceClient service = 
+                new ServiceClient(Path);
 
             string Question = Console.ReadLine();
             if (Question == "1")
@@ -39,6 +36,39 @@ namespace Satbayev.ConsoleApp
                 }else
                 {
                     Console.WriteLine("Привет " + client.FirstName);
+                    SrviceAccount serviceAccount = new SrviceAccount(Path);
+                    List<Account> accounts = serviceAccount.GetAllAccount(client.Id);
+                    if(accounts == null)
+                    {
+                        Console.WriteLine("Желаете открыть счет: Да / Нет?");
+                        string newChet = Console.ReadLine();
+                        if (newChet == "Да")
+                        {
+                            Account acc = new Account();
+                            acc.ClientId = client.Id;
+                            serviceAccount.CreateAccount(acc);
+                            
+                        }
+                    }
+
+                    foreach (Account item in accounts)
+                    {
+                        Console.WriteLine("{0}.\t{1}\t{2}KZT", item.Id,item.IBAN, item.Balance);
+                    }
+
+                    Console.Write("Выберите счет: ");
+                    int accountId = Convert.ToInt32(Console.ReadLine());
+
+                    Console.Write("Пополнить счет / Снять: ");
+                    string take = Console.ReadLine();
+                    switch (take)
+                    {
+                        case "Пополнить":
+                            {
+                                break;
+                            }
+                    }
+
                 }
 
             } else if(Question == "2")

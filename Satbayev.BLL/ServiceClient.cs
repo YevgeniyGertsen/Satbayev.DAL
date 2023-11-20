@@ -16,13 +16,12 @@ namespace Satbayev.BLL
 
         public void Registration(Client client)
         {     
-            bool resault = reposity.CreateClient(client);
+            bool resault = repo.Create(client);
         }
         public Client Auth(string login, string password)
         {
-            Client client = reposity.GetClient(login, password);
+            Client client = repo.GetAll().FirstOrDefault(f => f.Email == login && f.Password == password);
             return client;
         }
-        
     }
 }
